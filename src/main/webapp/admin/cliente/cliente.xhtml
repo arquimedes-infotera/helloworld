@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Helloworld gugu</title>
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body>
+        <f:view encoding="UTF-8">
+            <h:form id="frmCliente">
+                <h:column rendered="#{ClienteFace.listarState}">
+                    <div>
+                        <p:commandButton title="Pesquisar" action="#{ClienteFace.pesquisar()}" update="pnlClienteList"/>
+                        <p:commandButton title="adicionar" action="#{ClienteFace.adicionar()}" update="frmCliente"/>
+                    </div>
+                    <p:dataTable id="pnlClienteList" var="row" value="#{ClienteFace.clienteList}" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" rows="40" emptyMessage="Nenhum registro encontrado">
+                        <p:column style="text-align: center" headerText="id">
+                            <h:outputText value="#{row.id}" />
+                        </p:column>
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{row.nmCliente}" />
+                        </p:column>
+                        <p:column headerText="Email">
+                            <h:outputText value="#{row.nmEmail}" />
+                        </p:column>
+                        <p:column width="80" class="TexAlCenter">
+                            <p:commandButton title="remover" action="#{ClienteFace.remover}" process="@this" update="pnlClienteList">
+                                <f:setPropertyActionListener target="#{ClienteFace.cliente}" value="#{row}"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:column width="80" class="TexAlCenter">
+                            <p:commandButton title="editar" action="#{ClienteFace.editar}" process="@this" update="frmCliente">
+                                <f:setPropertyActionListener target="#{ClienteFace.cliente}" value="#{row}"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:ajax global="false" ignoreAutoUpdate="true" event="page"  onsuccess="topo();"/>
+                    </p:dataTable>
+                </h:column>
+                <h:column rendered="#{ClienteFace.editarState}">
+                    <div>
+                        <p:outputLabel for="idNome" value="Nome"/>
+                        <p:inputText autocomplete="off" placeholder="Nome completo"  id="idNome" value="#{ClienteFace.cliente.nmCliente}" required="true" requiredMessage="nome - preenchimento obrigatório"/>
+                    </div>
+                    <p:commandButton title="Voltar" action="#{ClienteFace.pesquisar()}" process="@this" update="frmCliente"/>
+                    <p:commandButton title="Salvar" action="#{ClienteFace.salvar()}" update="frmCliente"/>
+                </h:column>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
